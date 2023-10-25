@@ -22,8 +22,8 @@ if [ -x "$(command -v docker-compose)" ]; then
     sudo rm /usr/local/bin/docker-compose
     echo "docker-compose uninstalled successfully"
     echo "need to restart the server to clear caches"
-    reboot
 else
     echo "Docker Compose not found.need to install docker-compose..."
     exit 0
 fi
+
