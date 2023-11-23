@@ -3,22 +3,13 @@ if [ -x "$(command -v php)" ]; then
     version=$(php -r "echo PHP_VERSION;")
     if [ "$version" == "7.4.33" ]; then
         echo "PHP 7.4.33 is already installed."
-    else
-     echo "existing php not usefull.so uninstalling existing php...."
-     sudo apt-get remove --purge php* -y
-     sudo apt-get autoremove -y
-     sudo apt-get clean -y
-     echo "Installing PHP 7.4.33"
-     sudo add-apt-repository ppa:ondrej/php -y
-     sudo apt-get update
-     sudo apt install php7.4-fpm php7.4-common php7.4-mysql php7.4-xml php7.4-xmlrpc php7.4-curl php7.4-gd php7.4-imagick php7.4-cli php7.4-dev php7.4-imap php7.4-mbstring php7.4-opcache php7.4-redis php7.4-soap php7.4-zip -y
-     sed -i -e 's/post_max_size = 8M/post_max_size = 1000M/g' /etc/php/7.4/fpm/php.ini
-     sed -i -e 's/memory_limit = 128M/memory_limit = 2048M/g' /etc/php/7.4/fpm/php.ini
-     sed -i -e 's/max_execution_time = 30/max_execution_time = 360/g' /etc/php/7.4/fpm/php.ini
-     sed -i -e 's/upload_max_filesize = 2M/upload_max_filesize = 10000M/g' /etc/php/7.4/fpm/php.ini
-     echo "PHP 7.4.33 installed successfully."
+        echo "Uninstalling existing PHP..."
+        sudo apt-get remove --purge php7.4* -y
+        sudo apt-get autoremove -y
+        sudo apt-get clean -y
+
+        echo "Existing PHP uninstalled."
     fi
 else
-    echo "PHP 7.4.33. not found.need to Install PHP 7.4.33."
-    
+    echo "PHP 7.4.33 not found. Need to install PHP 7.4.33."
 fi
