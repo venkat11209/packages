@@ -1,0 +1,94 @@
+{
+  "author": "Matt Sergeant <helpme@gmail.com> (http://baudehlo.com/)",
+  "name": "Haraka",
+  "license": "MIT",
+  "description": "An SMTP Server project.",
+  "keywords": [
+    "haraka",
+    "smtp",
+    "server",
+    "email"
+  ],
+  "version": "2.8.27",
+  "homepage": "http://haraka.github.io",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/haraka/Haraka.git"
+  },
+  "main": "haraka.js",
+  "engines": {
+    "node": ">= v10.23.1"
+  },
+  "dependencies": {
+    "address-rfc2821"       : "^1.2.3",
+    "address-rfc2822"       : "^2.0.5",
+    "async"                 : "~3.2.0",
+    "daemon"                : "~1.1.0",
+    "generic-pool"          : "~2.5.4",
+    "iconv"                 : "~3.0.0",
+    "ipaddr.js"             : "~2.0.0",
+    "nopt"                  : "~5.0.0",
+    "npid"                  : "~0.4.0",
+    "semver"                : "~7.3.4",
+    "sprintf-js"            : "~1.1.2",
+    "haraka-config"         : ">=1.0.15",
+    "haraka-constants"      : ">=1.0.5",
+    "haraka-dsn"            : "*",
+    "haraka-net-utils"      : ">=1.2.3",
+    "haraka-notes"          : "*",
+    "haraka-plugin-redis"   : "^1.0.13",
+    "haraka-results"        : "^2.0.3",
+    "haraka-tld"            : "*",
+    "haraka-utils"          : "*",
+    "openssl-wrapper"       : "^0.3.4",
+    "sockaddr"              : "^1.0.1"
+  },
+  "optionalDependencies": {
+    "haraka-plugin-access"  : "*",
+    "haraka-plugin-asn"     : "*",
+    "haraka-plugin-auth-ldap": "*",
+    "haraka-plugin-dcc"     : "*",
+    "haraka-plugin-elasticsearch" : "*",
+    "haraka-plugin-fcrdns"  : "*",
+    "haraka-plugin-graph"   : "*",
+    "haraka-plugin-geoip"   : "*",
+    "haraka-plugin-headers" : "*",
+    "haraka-plugin-karma"   : "*",
+    "haraka-plugin-limit"   : "*",
+    "haraka-plugin-p0f"     : "*",
+    "haraka-plugin-qmail-deliverable" : "*",
+    "haraka-plugin-rcpt-ldap": "*",
+    "haraka-plugin-recipient-routes" : "*",
+    "haraka-plugin-rspamd"  : "*",
+    "haraka-plugin-syslog"  : "*",
+    "haraka-plugin-watch"   : "*",
+    "ocsp"                  : "~1.2.0",
+    "redis"                 : "~3.1.2",
+    "tmp"                   : "~0.1.0"
+  },
+  "devDependencies": {
+    "nodeunit"              : "*",
+    "haraka-test-fixtures"  : ">=1.0.27",
+    "mock-require"          : "^3.0.3",
+    "eslint"                : ">=6",
+    "eslint-plugin-haraka"  : "*",
+    "nodemailer"            : "6.2.1"
+  },
+  "bugs": {
+    "mail": "haraka.mail@gmail.com",
+    "url": "https://github.com/haraka/Haraka/issues"
+  },
+  "bin": {
+    "haraka": "./bin/haraka",
+    "spf": "./bin/spf",
+    "dkimverify": "./bin/dkimverify",
+    "haraka_grep": "./bin/haraka_grep"
+  },
+  "scripts": {
+    "test": "node run_tests",
+    "lint": "npx eslint *.js outbound/*.js plugins/*.js plugins/*/*.js tests/*.js tests/*/*.js tests/*/*/*.js bin/haraka bin/spf bin/dkimverify",
+    "lintfix": "npx eslint --fix *.js outbound/*.js plugins/*.js plugins/*/*.js tests/*.js tests/*/*.js tests/*/*/*.js bin/haraka bin/spf bin/dkimverify",
+    "cover": "NODE_ENV=cov npx nyc --reporter=lcovonly npm run test",
+    "versions": "npx dependency-version-checker check"
+  }
+}
