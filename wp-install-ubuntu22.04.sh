@@ -1,15 +1,15 @@
 set -x
-db_name='db_name'
-db_user='word_user'
-db_pass='word_pass'
+db_name='word_db'
+db_user='word_dbuser'
+db_pass='word_dbpass'
 DOMAIN_NAME="domain.com"
 #STEP 1: PREPARE AND UPDATE UBUNTU:
 sudo apt update
 #Nginx Installation:
 if [ $(dpkg-query -W -f='${Status}' nginx 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
   echo "Nginx is not installed. Installing..."
-  sudo apt-get update
-  sudo apt-get install nginx -y
+  sudo apt update
+  sudo apt install nginx -y
   echo "Nginx installation complete."
 else
   echo "Nginx is already installed."
@@ -26,8 +26,8 @@ else
     echo "certbot is already installed"
 fi
 
-#STEP 3: INSTALL PHP7.4:
-desired_version="7.4"
+#STEP 3: INSTALL PHP8.1:
+desired_version="8.1"
 if command -v php &>/dev/null; then
     php_version=$(php -r 'echo PHP_VERSION;')
     echo "PHP is already installed. Version: $php_version"
@@ -43,7 +43,6 @@ else
 
     echo "PHP $desired_version installed successfully."
 fi
-
 # Check if WordPress is already installed
 if [ -d "/var/www/html/$DOMAIN_NAME/wp-admin" ]; then
     echo "WordPress is already installed."
@@ -100,21 +99,6 @@ else
     echo "${DOMAIN_NAME} file not found or not symlinked in sites-enabled."
 fi
 
-# Check if the Nginx file with domain name already exists in sites-available
-if [ -f "/etc/nginx/sites-available/${DOMAIN_NAME}" ]; then
-    echo "${DOMAIN_NAME} Nginx file already exists in sites-available."
-else
-    echo "${DOMAIN_NAME} Nginx file not found in sites-available."
-
-fi
-
-# Check if the Nginx file with domain name is symlinked in sites-enabled
-if [ -L "/etc/nginx/sites-enabled/${DOMAIN_NAME}" ]; then
-    echo "${DOMAIN_NAME} Nginx file is symlinked in sites-enabled."
-else
-    echo "${DOMAIN_NAME} file not found or not symlinked in sites-enabled."
-fi
-
 FILE_PATH="/etc/nginx/sites-available"
 FILE_NAME="${DOMAIN_NAME}"
 # Define the data to write
@@ -131,16 +115,16 @@ DATA="server {
 
         location ~ \.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass            unix:/var/run/php/php7.4-fpm.sock;
+        fastcgi_pass            unix:/var/run/php/php8.1-fpm.sock;
         fastcgi_param   SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         }
 }"
 # Write the data to the file
-echo "${DATA}" > "${FILE_PATH}/${FILE_NAME}"
+echo "${DATA}" | sudo tee "${FILE_PATH}/${FILE_NAME}" > /dev/null
 echo "created nginx reverse proxy for ip and domain"
 #short link the config file for nginx
 echo "creating shortlink for nginx files"
-ln -s /etc/nginx/sites-available/${DOMAIN_NAME} /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/${DOMAIN_NAME} /etc/nginx/sites-enabled/
 #ssl certificate to domain
 echo "creating ssl for domains"
 sudo certbot --nginx -d ${DOMAIN_NAME} --redirect
@@ -196,21 +180,19 @@ else
 	echo "wordpress installation successfully completed"
  fi
 
-#STEP 7: Restart php-fpm,mysql and nginx Services:
-sudo systemctl restart nginx.service
-sudo systemctl restart php7.4-fpm.service
-sudo systemctl restart mysql.service
-
-
-
-
 
 #if root password already existed use this commands to create db,db_user and db_password for wordpress by manually 
 #db_name='word_db'
-#db_user='word_user'
-#db_pass='word_pass'
+#db_user='word_dbuser'
+#db_pass='word_dbpass'
 #password='existed root_password'
 #	mysql -uroot -p${password} -e "CREATE DATABASE ${db_name}"
 #	mysql -uroot -p${password} -e "CREATE USER '${db_user}'@'localhost' IDENTIFIED BY '${db_pass}';"
 #	mysql -uroot -p${password} -e "GRANT ALL PRIVILEGES ON ${db_name}.* TO '${db_user}'@'localhost';"
 #	mysql -uroot -p${password} -e "FLUSH PRIVILEGES;"
+
+
+#STEP 7: Restart php-fpm,mysql and nginx Services:
+sudo systemctl restart nginx.service
+sudo systemctl restart php$desired_version-fpm.service
+sudo systemctl restart mysql.service
