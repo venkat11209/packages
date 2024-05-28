@@ -1,0 +1,6 @@
+rglocation  = "ap-south-1"
+acesskey    = "your_acces_key"
+secretkey   = "your_secret_key"
+amiid       = "your_ami_id"
+storage     = "t2.micro"
+keypairname = "your_keypair_name"
